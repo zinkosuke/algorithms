@@ -1,3 +1,4 @@
+from heapq import heapify
 from heapq import heappop
 from heapq import heappush
 
@@ -24,9 +25,10 @@ for i in range(M):
     costs[b][a] = c
 mem = [INF] * N
 mem[K] = 0
-que = [(0, K)]
-while que:
-    cost, i = heappop(que)
+hq = [(0, K)]
+heapify(hq)
+while hq:
+    cost, i = heappop(hq)
     if mem[i] < cost:
         continue
     for j in range(N):
@@ -34,5 +36,5 @@ while que:
             continue
         if mem[i] + costs[i][j] < mem[j]:
             mem[j] = mem[i] + costs[i][j]
-            heappush(que, (mem[j], j))
+            heappush(hq, (mem[j], j))
 print(mem)
