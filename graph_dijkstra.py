@@ -1,4 +1,3 @@
-from heapq import heapify
 from heapq import heappop
 from heapq import heappush
 
@@ -26,7 +25,6 @@ for i in range(M):
 mem = [INF] * N
 mem[K] = 0
 hq = [(0, K)]
-heapify(hq)
 while hq:
     cost, i = heappop(hq)
     if mem[i] < cost:

@@ -8,6 +8,7 @@ setrecursionlimit(10 ** 5 + 1)
 
 
 def bitcount(x):
+    # TODO ビット数カウント 意味不明
     x = (x & 0x55555555) + (x >> 1 & 0x55555555)
     x = (x & 0x33333333) + (x >> 2 & 0x33333333)
     x = (x & 0x0F0F0F0F) + (x >> 4 & 0x0F0F0F0F)
@@ -17,6 +18,7 @@ def bitcount(x):
 
 
 def divisors(n):
+    # 約数列挙
     r = set([1, n])
     i = 2
     while i ** 2 <= n:
@@ -28,6 +30,7 @@ def divisors(n):
 
 
 def extgcd(a, b):
+    # 拡張ユークリッドの互除法
     # ax + by = gcd(a, b)
     # bx' + (a%b)y' = gcd(a, b)
     #   a%b = a - (a/b)b より
@@ -39,6 +42,8 @@ def extgcd(a, b):
 
 
 def factorize(n):
+    # 素因数分解
+    # TODO sqrt使わない
     r = []
     j = 2
     while 1 < n:
@@ -54,6 +59,60 @@ def factorize(n):
     return r
 
 
+def modinv(a, mod):
+    # 非再帰拡張ユークリッドの互除法による逆元
+    # TODO 仕組みわかってない
+    b, u, v = mod, 1, 0
+    while b:
+        t = a // b
+        a -= t * b
+        u -= t * v
+        a, b = b, a
+        u, v = v, u
+    u %= mod
+    if u < 0:
+        u += mod
+    return u
+
+
+def modpow(a, n, mod):
+    # 二分累乗法
+    # bin(45) == '0b101101'
+    # 3**45 == 3**(2**0 + 2**2 + 2**3 + 2**5)
+    # .     == 3**(2**0) * 3**(2**2) * 3**(2**3) * 3**(2**5)
+    r = 1
+    while n:
+        if n & 1:
+            r = r * a % mod
+        a = a * a % mod
+        n >>= 1
+    return r
+
+
+def sieve_eratosthenes(n):
+    # エラトステネスの篩
+    if n < 3:
+        return [0, 0, 1]
+    p = [i % 2 for i in range(n + 1)]
+    p[1], p[2] = 0, 1
+    for i in range(3, n + 1, 2):
+        if not p[i]:
+            continue
+        j = 3
+        is_i_prime = True
+        while j ** 2 <= i:
+            if not i % j:
+                is_i_prime = False
+                break
+            j += 1
+        if not is_i_prime:
+            k = 1
+            while i * k <= n:
+                p[i * k] = 0
+                k += 1
+    return p
+
+
 def t():
     """
     >>> bitcount(0), bitcount(0b111), bitcount(0b1010)
@@ -67,6 +126,15 @@ def t():
 
     >>> factorize(1), factorize(12), factorize(10**9 + 7)
     ([], [2, 2, 3], [1000000007])
+
+    >>> modinv(2, 13), modinv(2, 13) * 2 % 13
+    (7, 1)
+
+    >>> modpow(3, 45, 10**9 + 7)
+    644897553
+
+    >>> sieve_eratosthenes(12)
+    [0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0]
 
     >>> bisect.bisect_left(range(10), 4), bisect.bisect_right(range(10), 4)
     (4, 5)
