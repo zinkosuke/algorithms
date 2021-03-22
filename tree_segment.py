@@ -1,28 +1,29 @@
-class SegTree:
-    INF = float("inf")
+INF = float("inf")
 
+
+class SegTree:
     def __init__(self, n):
         x = 1
         while x < n:
             x *= 2
         self.n = x
-        self.r = [self.INF] * (2 * x - 1)
+        self.node = [INF] * (2 * x - 1)
 
     def update(self, k, v):
         k += self.n - 1
-        self.r[k] = v
+        self.node[k] = v
         while 0 < k:
             k = (k - 1) // 2
-            self.r[k] = min(self.r[2 * k + 1], self.r[2 * k + 2])
+            self.node[k] = min(self.node[2 * k + 1], self.node[2 * k + 2])
 
     def query(self, a, b):
         return self.__query(a, b, 0, 0, self.n)
 
     def __query(self, a, b, k, l, r):
         if r <= a or b <= l:
-            return self.INF
+            return INF
         if a <= l and r <= b:
-            return self.r[k]
+            return self.node[k]
         m = (l + r) // 2
         vl = self.__query(a, b, 2 * k + 1, l, m)
         vr = self.__query(a, b, 2 * k + 2, m, r)
@@ -39,11 +40,11 @@ def t():
     >>> st = SegTree(len(tr))
     >>> for i, t in enumerate(tr):
     ...     st.update(i, t)
-    >>> st.r
+    >>> st.node
     [2, 2, 3, 2, 4, 5, 3, 10, 2, 9, 4, 5, 8, 3, inf]
     >>> st.query(-1, 10**9), st.query(2, 5)
     (2, 4)
     >>> st.update(4, 1)
-    >>> st.r
+    >>> st.node
     [1, 2, 1, 2, 4, 1, 3, 10, 2, 9, 4, 1, 8, 3, inf]
     """
