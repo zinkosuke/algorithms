@@ -61,7 +61,7 @@ def factorize(n):
 
 def modinv(a, mod):
     # 非再帰拡張ユークリッドの互除法による逆元
-    # TODO 仕組みわかってない
+    # TODO 仕組みわかってない ...x**-1 = x**(P-2)でいけるらしい
     b, u, v = mod, 1, 0
     while b:
         t = a // b
