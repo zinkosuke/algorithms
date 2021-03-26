@@ -1,5 +1,4 @@
-from heapq import heappop
-from heapq import heappush
+from heapq import heappop, heappush
 
 inputlines = """
 0 1 2
@@ -36,3 +35,4 @@ while hq:
             mem[j] = mem[i] + costs[i][j]
             heappush(hq, (mem[j], j))
 print(mem)
+# 辺に重みないやつならdqeueでインデックスだけ渡せばいける
